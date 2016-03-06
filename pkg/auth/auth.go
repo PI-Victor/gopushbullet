@@ -9,31 +9,41 @@ import (
 )
 
 const (
-	transportProtocol = "https://"
-	pushbulletAPIURL  = "api.pushbullet.com"
-	apiVersion        = "v2"
-	usersAuthPath     = "users/me"
+	transportProtocol   = "https://"
+	pushbulletAPIURL    = "api.pushbullet.com"
+	apiVersion          = "v2"
+	usersAuthPath       = "users/me"
+	okResponse          = "200 OK"
+	unathorizedResponse = "401 Unauthorized"
 )
 
 // UserDetails holds information returned from the API
 type UserDetails struct {
-	created string
-	email   string
+	Created string
+	Email   string
 }
 
-//{"error":{"code":"invalid_access_token","type":"invalid_request","message":"Access token is missing or invalid.","cat":"(=^･ω･^)y＝"},"error_code":"invalid_access_token"}
+// {
+//   "error":{
+//     "code":"invalid_access_token",
+//     "type":"invalid_request",
+//     "message":"Access token is missing or invalid.",
+//     "cat":"(=^･ω･^)y＝"
+//   },
+//   "error_code":"invalid_access_token"
+// }
 
 // APIRequestError holds an error returned from the API
 type APIRequestError struct {
-	error     apiErrorCode
-	errorCode string
+	APIError  apiErrorCode `json:"error"`
+	ErrorCode string       `json:"error_code"`
 }
 
 type apiErrorCode struct {
-	errorCode string
-	erroType  string
-	message   string
-	cat       string
+	ErrorCode string `json:"code"`
+	ErrorType string `json:"type"`
+	Message   string `json:"message"`
+	Cat       string `json:"cat"`
 }
 
 // PushbulletAPIURL is the current version of the API URL
@@ -61,7 +71,6 @@ func validateUserToken(userToken string) error {
 	req, err := http.NewRequest("GET", PushbulletAPIURL, nil)
 	req.Header.Add("application/type", HeaderMIMEJsonType)
 	req.Header.Add("Access-Token", userToken)
-
 	if err != nil {
 		return err
 	}
@@ -70,18 +79,24 @@ func validateUserToken(userToken string) error {
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
 
-	respBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return err
+	response, err := ioutil.ReadAll(resp.Body)
+	//this doesn't leave room for other response codes, but it will do for now
+	if resp.Status == unathorizedResponse {
+		var requestError APIRequestError
+		if err != nil {
+			return err
+		}
+		err = json.Unmarshal(response, &requestError)
+		if err != nil {
+			return err
+		}
+		return fmt.Errorf("There was an error authenticating you: %s", requestError.APIError.ErrorCode)
 	}
 
-	errorCode := &apiErrorCode{}
-	err = json.Unmarshal(respBody, errorCode)
-	if err != nil {
-		return err
-	}
-	fmt.Println(errorCode)
+	fmt.Println("Token validated! You can start using your account!")
+
 	return nil
 }
 
