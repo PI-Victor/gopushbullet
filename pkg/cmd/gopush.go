@@ -2,17 +2,25 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/spf13/cobra"
+
+	"github.com/PI-Victor/gopushbullet/pkg/auth"
 )
+
+// APIToken stores the Pushbullet API Token that is specified by the user
+var APIToken string
 
 // LoginCommand asks for the login token and will store it if it will
 // authenticate
 var LoginCommand = &cobra.Command{
 	Use:   "login",
-	Short: "login to PushBullet API",
-	Long:  "Fill in your PushBullet Token to login to PushBullet",
+	Short: "login --token <my_generated_access_token>",
+	Long: `
+Fill in your Pushbullet Access Token and use it to authenticate to the
+Pushbullet API.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("login")
+		auth.Authenticate(APIToken)
 	},
 }
 
@@ -25,6 +33,15 @@ var LogoutCommand = &cobra.Command{
 	},
 }
 
-// func init() {
-// 	StartCommand.PersistentFlags().StringVar(, "config", "", "Specify a configuration file")
-// }
+// ListPushes lists pushes from your Pushbullet account via the API
+var ListPushes = &cobra.Command{
+	Use:   "list-pushes",
+	Short: "List your stored pushes from your Pushbullet Account",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("ListPushes")
+	},
+}
+
+func init() {
+	LoginCommand.PersistentFlags().StringVar(&APIToken, "token", "", "Specify your account Access Token")
+}
