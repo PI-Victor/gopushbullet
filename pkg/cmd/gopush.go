@@ -24,7 +24,7 @@ Pushbullet API.`,
 	},
 }
 
-// LogoutCommand remove the current API token from the program
+// LogoutCommand remove the current API token from the application
 var LogoutCommand = &cobra.Command{
 	Use:   "logout",
 	Short: "logout removes the current used PushBulelt API access token",
