@@ -100,15 +100,21 @@ func validateUserToken(userToken string) error {
 		return err
 	}
 	user.Token = userToken
-	fmt.Printf("Token validated! Logged in as: %+v \n", user)
+	fmt.Printf("Token validated! Logged in as: %+v \n", user.Name)
 
-	storeUserToken(userToken)
+	if err := storeUserToken(user); err != nil {
+		return err
+	}
 
 	return nil
 }
 
-// stores the user token in a temporary folder hidden folder in $HOME
-func storeUserToken(userToken string) {
+// stores the user token in a temporary hidden folder in $HOME
+func storeUserToken(user UserDetails) error {
 	newConfig := client.NewConfig()
-	fmt.Println(newConfig)
+	err := newConfig.WriteConfig(user)
+	if err != nil {
+		return err
+	}
+	return nil
 }

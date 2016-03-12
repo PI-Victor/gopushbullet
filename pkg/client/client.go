@@ -1,13 +1,16 @@
 package client
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path"
 )
 
-const configFileName = "gopush.json"
-const configDir = ".gopush"
+const (
+	configFileName = "gopush.json"
+	configDir      = ".gopush"
+)
 
 // Configuration holds information about the current setup of this CLI
 // application
@@ -31,19 +34,45 @@ func NewConfig() *Configuration {
 	}
 }
 
-// ReadConfig reads the configuration file and returns needed data for
-// authtentication
-func (c Configuration) readConfig() (fileHandler *os.File, err error) {
-	fileHandler, err = os.Open(c.configFile)
+// WriteConfig flushes the jsonified data to the config file
+func (c *Configuration) WriteConfig(user interface{}) error {
+	fileHandler, err := os.Create(c.configFile)
+	defer fileHandler.Close()
 	if err != nil {
-		return nil, err
+		fmt.Println("i failed", err)
+		return err
 	}
-	return fileHandler, nil
+
+	// prettify the encoding so that it's human readable
+	encodedUserDetails, err := json.MarshalIndent(user, "", " ")
+	if err != nil {
+		return err
+	}
+
+	_, err = fileHandler.Write(encodedUserDetails)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// PurgeConfig - purges current config file regardless if it has details about
+// a user or not
+func (c *Configuration) PurgeConfig() {
+	var emptyBytes []byte
+
+	fileHandler, err := os.Create(c.configFile)
+	if err != nil {
+		panic(err)
+	}
+
+	defer fileHandler.Close()
+	fileHandler.Write(emptyBytes)
+
 }
 
 // creates current setup dir and config file
 func configSetup() (configDirPath string, configFilePath string, err error) {
-
 	homePath := os.Getenv("HOME")
 	if homePath == "" {
 		return "", "", fmt.Errorf("Couldn't read the $HOME variable, no place to store app config")
