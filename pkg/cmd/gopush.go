@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/PI-Victor/gopushbullet/pkg/auth"
+	"github.com/PI-Victor/gopushbullet/pkg/client"
 )
 
 // APIToken stores the Pushbullet API Token that is specified by the user
@@ -29,7 +30,9 @@ var LogoutCommand = &cobra.Command{
 	Use:   "logout",
 	Short: "logout removes the current used PushBulelt API access token",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("logout")
+		newConfig := client.NewConfig()
+		newConfig.PurgeConfig()
+		fmt.Println("Your user details have been successfully removed")
 	},
 }
 
