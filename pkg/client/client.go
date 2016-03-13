@@ -57,7 +57,7 @@ func (c *Configuration) WriteConfig(user interface{}) error {
 }
 
 // PurgeConfig - purges current config file regardless if it has details about
-// a user or not
+// a user or not. Flushes details but doesn't delete the file
 func (c *Configuration) PurgeConfig() {
 	var emptyBytes []byte
 
@@ -68,7 +68,11 @@ func (c *Configuration) PurgeConfig() {
 
 	defer fileHandler.Close()
 	fileHandler.Write(emptyBytes)
+}
 
+func (c *Configuration) readConfig() interface{} {
+
+	return ""
 }
 
 // creates current setup dir and config file

@@ -8,6 +8,7 @@ import (
 func main() {
 	RootCmd.AddCommand(cmd.LoginCommand)
 	RootCmd.AddCommand(cmd.LogoutCommand)
+	RootCmd.AddCommand(cmd.ListPushes)
 	RootCmd.Execute()
 }
 

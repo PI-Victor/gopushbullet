@@ -3,23 +3,9 @@ package auth
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	_ "os"
-	"path"
 
 	"github.com/PI-Victor/gopushbullet/pkg/client"
-)
-
-const (
-	// HeaderMIMEJsonType is the MIME Type to be used in requests to the API
-	HeaderMIMEJsonType  = "application/json"
-	transportProtocol   = "https://"
-	pushbulletAPIURL    = "api.pushbullet.com"
-	apiVersion          = "v2"
-	usersAuthPath       = "users/me"
-	okResponse          = "200 OK"
-	unathorizedResponse = "401 Unauthorized"
+	"github.com/PI-Victor/gopushbullet/pkg/util"
 )
 
 // UserDetails holds information returned from the API
@@ -34,22 +20,6 @@ type UserDetails struct {
 	Token         string  `json:"token"`
 }
 
-// APIRequestError holds an error returned from the API
-type APIRequestError struct {
-	APIError  apiErrorCode `json:"error"`
-	ErrorCode string       `json:"error_code"`
-}
-
-type apiErrorCode struct {
-	ErrorCode string `json:"code"`
-	ErrorType string `json:"type"`
-	Message   string `json:"message"`
-	Cat       string `json:"cat"`
-}
-
-// PushbulletAPIURL is the current version of the API URL
-var PushbulletAPIURL = transportProtocol + path.Join(pushbulletAPIURL, apiVersion, usersAuthPath)
-
 // Authenticate validates the user Access Token
 func Authenticate(userToken string) {
 	err := validateUserToken(userToken)
@@ -58,44 +28,16 @@ func Authenticate(userToken string) {
 	}
 }
 
-// createNewHttpClient creates a new request client
-func createNewHTTPClient() *http.Client {
-	return &http.Client{}
-}
-
 // validateUserToken validates the current access token
 func validateUserToken(userToken string) error {
-	requestClient := createNewHTTPClient()
-	req, err := http.NewRequest("GET", PushbulletAPIURL, nil)
-	req.Header.Add("application/type", HeaderMIMEJsonType)
-	req.Header.Add("Access-Token", userToken)
+
+	apiResponse, err := util.ProcessAPIRequest("GET", userToken)
 	if err != nil {
 		return err
-	}
-
-	resp, err := requestClient.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	response, err := ioutil.ReadAll(resp.Body)
-	// this doesn't leave room for other response codes, but it will have to do
-	// for now
-	if resp.Status == unathorizedResponse {
-		var requestError APIRequestError
-		if err != nil {
-			return err
-		}
-		err = json.Unmarshal(response, &requestError)
-		if err != nil {
-			return err
-		}
-		return fmt.Errorf("There was an error authenticating you: %s", requestError.APIError.ErrorCode)
 	}
 
 	var user UserDetails
-	err = json.Unmarshal(response, &user)
+	err = json.Unmarshal(apiResponse, &user)
 	if err != nil {
 		return err
 	}
