@@ -10,7 +10,10 @@ import (
 )
 
 // APIToken stores the Pushbullet API Token that is specified by the user
-var APIToken string
+var (
+	APIToken     string
+	pushesFilter string
+)
 
 // LoginCommand asks for the login token and will store it if it will
 // authenticate
@@ -18,8 +21,7 @@ var LoginCommand = &cobra.Command{
 	Use:   "login",
 	Short: "login --token <my_generated_access_token>",
 	Long: `
-Fill in your Pushbullet Access Token and use it to authenticate to the
-Pushbullet API.`,
+Fill in your Pushbullet Access Token and use it to access you account.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		auth.Authenticate(APIToken)
 	},
@@ -28,7 +30,7 @@ Pushbullet API.`,
 // LogoutCommand remove the current API token from the application
 var LogoutCommand = &cobra.Command{
 	Use:   "logout",
-	Short: "logout removes the current used PushBulelt API access token",
+	Short: "logout removes the current stored user details that are used to authenticate you",
 	Run: func(cmd *cobra.Command, args []string) {
 		newConfig := client.NewConfig()
 		newConfig.PurgeConfig()
@@ -39,12 +41,13 @@ var LogoutCommand = &cobra.Command{
 // ListPushes lists pushes from your Pushbullet account via the API
 var ListPushes = &cobra.Command{
 	Use:   "list-pushes",
-	Short: "List your stored pushes from your Pushbullet Account",
+	Short: "List stored pushes from your account",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("ListPushes")
+		fmt.Println("ListPushes", pushesFilter)
 	},
 }
 
 func init() {
 	LoginCommand.PersistentFlags().StringVar(&APIToken, "token", "", "Specify your account Access Token")
+	ListPushes.PersistentFlags().StringVar(&pushesFilter, "filter", "", " A filter for the returned pushes")
 }
