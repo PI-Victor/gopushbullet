@@ -15,7 +15,7 @@ If you have go 1.6 it's on by default.
 * Git clone this repo.  
 * In the project folder `go build -o gopush cmd/gopush/main.go`  
 
-NOTE: at this point you might wanna add it to your `GOPATH/bin` by copying it there so that you can execute. That is if you have your `GOPATH/bin` added to `PATH`.
+NOTE: at this point you might wanna add it to your `GOPATH/bin` by copying it there so that you can execute it. That is if you have your `GOPATH/bin` added to `PATH`.
 
 * Create a new Pushbullet API Token by logging into your account and going to `Settings`-> `Create Access Token`  
 * Login with your generated token with `gopush login --token <my_generated_access_token>`  
