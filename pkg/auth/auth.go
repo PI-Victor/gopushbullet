@@ -42,7 +42,7 @@ func validateUserToken(userToken string) error {
 		return err
 	}
 	user.Token = userToken
-	fmt.Printf("Token validated! Logged in as: %+v \n", user.Name)
+	fmt.Printf("Token validated! Logged in as: %s \n", user.Name)
 
 	if err := storeUserToken(user); err != nil {
 		return err

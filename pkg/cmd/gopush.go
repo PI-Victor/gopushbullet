@@ -30,7 +30,7 @@ Fill in your Pushbullet Access Token and use it to access you account.`,
 // LogoutCommand remove the current API token from the application
 var LogoutCommand = &cobra.Command{
 	Use:   "logout",
-	Short: "logout removes the current stored user details that are used to authenticate you",
+	Short: "logout removes the current stored user details that are currently used for authentication",
 	Run: func(cmd *cobra.Command, args []string) {
 		newConfig := client.NewConfig()
 		newConfig.PurgeConfig()
@@ -49,5 +49,5 @@ var ListPushes = &cobra.Command{
 
 func init() {
 	LoginCommand.PersistentFlags().StringVar(&APIToken, "token", "", "Specify your account Access Token")
-	ListPushes.PersistentFlags().StringVar(&pushesFilter, "filter", "", " A filter for the returned pushes")
+	ListPushes.PersistentFlags().StringVar(&pushesFilter, "filter", "", "A filter for the returned pushes")
 }
