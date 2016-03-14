@@ -67,7 +67,6 @@ func ProcessAPIRequest(HTTPMethod string, userToken string) ([]byte, error) {
 
 	resp, err := requestClient.Do(req)
 	if err != nil {
-		fmt.Println("got here with request: ", req)
 		return nil, err
 	}
 	defer resp.Body.Close()
