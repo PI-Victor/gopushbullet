@@ -43,11 +43,39 @@ var ListPushes = &cobra.Command{
 	Use:   "list-pushes",
 	Short: "List stored pushes from your account",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("ListPushes", pushesFilter)
+		session.ListPushes()
+	},
+}
+
+// PushNote pushes a message/notification to a specified device or to all
+var PushNote = &cobra.Command{
+	Use:   "push-note",
+	Short: "Push ephemeral notifications from the CLI to your devices",
+	Run: func(cmd *cobra.Command, args []string) {
+		session.PushNote()
+	},
+}
+
+// PushSMS sends a SMS message to a specific number from your device
+var PushSMS = &cobra.Command{
+	Use:   "sms",
+	Short: "Send SMS messages on behalf of your device to a specified number",
+	Run: func(cmd *cobra.Command, args []string) {
+		session.PushSMS()
+	},
+}
+
+// ListDevices lists the devices that are attached to your Pushbullet account
+var ListDevices = &cobra.Command{
+	Use:   "list-devices",
+	Short: "List devices that are attached to your account",
+	Run: func(cmd *cobra.Command, args []string) {
+		session.ListDevices()
 	},
 }
 
 func init() {
 	LoginCommand.PersistentFlags().StringVar(&APIToken, "token", "", "Specify your account Access Token")
 	ListPushes.PersistentFlags().StringVar(&pushesFilter, "filter", "", "A filter for the returned pushes")
+	ListPushes.PersistentFlags().StringVar(&deleted, "deleted", "off", "Display deleted pushes by turning the flag on")
 }
