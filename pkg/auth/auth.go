@@ -30,8 +30,8 @@ func Authenticate(userToken string) {
 
 // validateUserToken validates the current access token
 func validateUserToken(userToken string) error {
-
-	apiResponse, err := util.ProcessAPIRequest("GET", userToken)
+	headerOptions := make(map[string]string)
+	apiResponse, err := util.ProcessAPIRequest("GET", util.UsersAPIURL, userToken, headerOptions)
 	if err != nil {
 		return err
 	}
