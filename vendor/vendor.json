@@ -3,6 +3,12 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "BoXdUBWB8UnSlFlbnuTQaPqfCGk=",
+			"path": "github.com/op/go-logging",
+			"revision": "970db520ece77730c7e4724c61121037378659d9",
+			"revisionTime": "2016-03-15T21:05:05+01:00"
+		},
+		{
 			"checksumSHA1": "6q2a9wCqTTEOQE+WTfhzZqcJvFM=",
 			"path": "github.com/spf13/cobra",
 			"revision": "1bacefc9a216c93293e670067bd159a64b4d72c3",
