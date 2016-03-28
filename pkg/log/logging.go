@@ -6,7 +6,7 @@ import (
 	"github.com/op/go-logging"
 )
 
-const format = "%{color}%{time:15:04:05.000}%{level:.6s} ▶ %{color:reset} %{message}"
+const format = "%{time:15:04:05.000} %{color} %{level:.6s} ▶ %{color:reset} %{message}"
 
 var (
 	log           = logging.MustGetLogger("gopush")

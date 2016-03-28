@@ -22,7 +22,8 @@ type apiErrorCode struct {
 }
 
 const (
-	// HeaderMIMEJsonType is the MIME Type to be used in requests to the API
+	// HeaderMIMEJsonType is the MIME Type to be used in requests to the
+	// API
 	HeaderMIMEJsonType = "application/json"
 	transportProtocol  = "https://"
 	pushbulletAPIURL   = "api.pushbullet.com"
@@ -41,6 +42,12 @@ var PushesAPIURL = transportProtocol + path.Join(pushbulletAPIURL, apiVersion, p
 
 // DevicesAPIURL is the path that returns the devices attached to your account.
 var DevicesAPIURL = transportProtocol + path.Join(pushbulletAPIURL, apiVersion, devicesPath)
+
+// Client is a client that does http request to the API and returns a response
+// or an error
+type Client interface {
+	Do(r *http.Request) (*http.Request, error)
+}
 
 // adds parameters to the header of a request that gets sent to the API. The
 // type of the response and the saved access token are added by default to each

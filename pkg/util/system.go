@@ -38,8 +38,11 @@ func CreateDirectories() (configDirPath string, configFilePath string, err error
 	return
 }
 
-// PurgeArtifacts removes all the config and data from disk
-func PurgeArtifacts() error {
-
+// PurgeArtifacts removes user stored configuration and data from disk
+func PurgeArtifacts(configDir string) error {
+	err := os.RemoveAll(configDir)
+	if err != nil {
+		return err
+	}
 	return nil
 }

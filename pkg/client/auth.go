@@ -1,10 +1,9 @@
-package auth
+package client
 
 import (
 	"encoding/json"
-	"fmt"
 
-	"github.com/PI-Victor/gopushbullet/pkg/client"
+	"github.com/PI-Victor/gopushbullet/pkg/log"
 	"github.com/PI-Victor/gopushbullet/pkg/util"
 )
 
@@ -24,12 +23,13 @@ type UserDetails struct {
 func Authenticate(userToken string) {
 	err := validateUserToken(userToken)
 	if err != nil {
-		fmt.Println(err)
+		log.Critical("%s", err)
 	}
 }
 
 // validateUserToken validates the current access token
 func validateUserToken(userToken string) error {
+	// replace this with the header wrapper
 	headerOptions := make(map[string]string)
 	apiResponse, err := util.ProcessAPIRequest("GET", util.UsersAPIURL, userToken, headerOptions)
 	if err != nil {
@@ -42,7 +42,7 @@ func validateUserToken(userToken string) error {
 		return err
 	}
 	user.Token = userToken
-	fmt.Printf("Token validated! Logged in as: %s \n", user.Name)
+	log.Info("Token validated!\nLogged in as: %s \n", user.Name)
 
 	if err := storeUserToken(user); err != nil {
 		return err
@@ -53,7 +53,7 @@ func validateUserToken(userToken string) error {
 
 // stores the user token in a temporary hidden folder in $HOME
 func storeUserToken(user UserDetails) error {
-	newConfig := client.NewConfig()
+	newConfig := NewConfig()
 	err := newConfig.WriteConfig(user)
 	if err != nil {
 		return err
