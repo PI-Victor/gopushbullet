@@ -23,7 +23,7 @@ type UserDetails struct {
 func Authenticate(userToken string) {
 	err := validateUserToken(userToken)
 	if err != nil {
-		log.Critical(err)
+		log.Fatal("", err)
 	}
 }
 
