@@ -1,0 +1,25 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "HrTrzY4uDJ996Q1+9ON4X/Oq4Kg=",
+			"path": "github.com/op/go-logging",
+			"revision": "dfaf3dff9b631bc4236201d90d41ee0de9202889",
+			"revisionTime": "2015-12-05T05:57:10+01:00"
+		},
+		{
+			"checksumSHA1": "4KcCyGRFquWUgZaljRgjPbk7i7o=",
+			"path": "github.com/spf13/cobra",
+			"revision": "c678ff029ee250b65714e518f4f5c5cb934955de",
+			"revisionTime": "2016-03-22T12:10:42-05:00"
+		},
+		{
+			"checksumSHA1": "MrBzoMkuXdrGKo09/ka+JCC2Mlk=",
+			"path": "github.com/spf13/pflag",
+			"revision": "7f60f83a2c81bc3c3c0d5297f61ddfa68da9d3b7",
+			"revisionTime": "2015-10-24T12:54:09+02:00"
+		}
+	],
+	"rootPath": "github.com/PI-Victor/gopushbullet"
+}
