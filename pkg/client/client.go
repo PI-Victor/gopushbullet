@@ -2,14 +2,11 @@ package client
 
 import (
 	"encoding/json"
-	"fmt"
+	"io/ioutil"
 	"os"
-	"path"
-)
 
-const (
-	configFileName = "gopush.json"
-	configDir      = ".gopush"
+	"github.com/PI-Victor/gopushbullet/pkg/util"
+	"github.com/PI-Victor/gopushbullet/pkg/log"	
 )
 
 // Configuration holds information about the current setup of this CLI
@@ -23,9 +20,9 @@ type Configuration struct {
 
 // NewConfig returns a new instance of the client config
 func NewConfig() *Configuration {
-	confDir, confFile, err := configSetup()
+	confDir, confFile, err := util.CreateDirectories()
 	if err != nil {
-		panic(err)
+		log.Critical("An error occured %s", err)
 	}
 
 	return &Configuration{
@@ -37,11 +34,10 @@ func NewConfig() *Configuration {
 // WriteConfig flushes the jsonified data to the config file
 func (c *Configuration) WriteConfig(user interface{}) error {
 	fileHandler, err := os.Create(c.configFile)
-	defer fileHandler.Close()
 	if err != nil {
-		fmt.Println("i failed", err)
 		return err
 	}
+	defer fileHandler.Close()
 
 	// prettify the encoding so that it's human readable
 	encodedUserDetails, err := json.MarshalIndent(user, "", " ")
@@ -56,47 +52,35 @@ func (c *Configuration) WriteConfig(user interface{}) error {
 	return nil
 }
 
-// PurgeConfig - purges current config file regardless if it has details about
-// a user or not. Flushes details but doesn't delete the file
-func (c *Configuration) PurgeConfig() {
-	var emptyBytes []byte
+// ReadConfig read the stored configuration about the user from the file on the
+// disk, return the userDetails struct with the apropiate data or fail for any
+// other reason.
+func (c *Configuration) ReadConfig(user interface{}) (userDetails interface{}, err error) {
+	if _, err = os.Stat(c.configFile); os.IsNotExist(err) {
+		return nil, err
+	}
 
-	fileHandler, err := os.Create(c.configFile)
+	authDetails, err := ioutil.ReadFile(c.configFile)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	defer fileHandler.Close()
-	fileHandler.Write(emptyBytes)
+	err = json.Unmarshal(authDetails, &userDetails)
+	if err != nil {
+		return nil, err
+	}
+
+	return &userDetails, nil
 }
 
-func (c *Configuration) readConfig() interface{} {
-
-	return ""
-}
-
-// creates current setup dir and config file
-func configSetup() (configDirPath string, configFilePath string, err error) {
-	homePath := os.Getenv("HOME")
-	if homePath == "" {
-		return "", "", fmt.Errorf("Couldn't read the $HOME variable, no place to store app config")
+// Logout logs a user out by purging all the stored config files and data from
+// disk
+func (c *Configuration) Logout() {
+	err := util.PurgeArtifacts(c.configDir)
+	if err != nil {
+		log.Critical("An error occured while logging out: ", err)
+		return
 	}
-
-	configDirPath = path.Join(homePath, configDir)
-	if _, err := os.Stat(configDirPath); os.IsNotExist(err) {
-		err = os.MkdirAll(configDirPath, 0700)
-		if err != nil {
-			return "", "", err
-		}
-	}
-
-	configFilePath = path.Join(configDirPath, configFileName)
-	if _, err := os.Stat(configFilePath); os.IsNotExist(err) {
-		configFileHandler, err := os.Create(configFilePath)
-		defer configFileHandler.Close()
-		if err != nil {
-			return "", "", err
-		}
-	}
-	return
+	
+	log.Info("Your user details have been successfully removed")
 }

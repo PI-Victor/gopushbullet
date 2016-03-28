@@ -1,11 +1,8 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 
-	"github.com/PI-Victor/gopushbullet/pkg/auth"
 	"github.com/PI-Victor/gopushbullet/pkg/client"
 )
 
@@ -13,6 +10,7 @@ import (
 var (
 	APIToken     string
 	pushesFilter string
+	deleted      string
 )
 
 // LoginCommand asks for the login token and will store it if it will
@@ -23,7 +21,7 @@ var LoginCommand = &cobra.Command{
 	Long: `
 Fill in your Pushbullet Access Token and use it to access you account.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		auth.Authenticate(APIToken)
+		client.Authenticate(APIToken)
 	},
 }
 
@@ -33,8 +31,7 @@ var LogoutCommand = &cobra.Command{
 	Short: "logout removes the current stored user details that are currently used for authentication",
 	Run: func(cmd *cobra.Command, args []string) {
 		newConfig := client.NewConfig()
-		newConfig.PurgeConfig()
-		fmt.Println("Your user details have been successfully removed")
+		newConfig.Logout()
 	},
 }
 
@@ -43,7 +40,7 @@ var ListPushes = &cobra.Command{
 	Use:   "list-pushes",
 	Short: "List stored pushes from your account",
 	Run: func(cmd *cobra.Command, args []string) {
-		session.ListPushes()
+		client.ListPushes()
 	},
 }
 
@@ -52,7 +49,7 @@ var PushNote = &cobra.Command{
 	Use:   "push-note",
 	Short: "Push ephemeral notifications from the CLI to your devices",
 	Run: func(cmd *cobra.Command, args []string) {
-		session.PushNote()
+		client.PushNote()
 	},
 }
 
@@ -61,7 +58,7 @@ var PushSMS = &cobra.Command{
 	Use:   "sms",
 	Short: "Send SMS messages on behalf of your device to a specified number",
 	Run: func(cmd *cobra.Command, args []string) {
-		session.PushSMS()
+		client.PushSMS()
 	},
 }
 
@@ -70,7 +67,7 @@ var ListDevices = &cobra.Command{
 	Use:   "list-devices",
 	Short: "List devices that are attached to your account",
 	Run: func(cmd *cobra.Command, args []string) {
-		session.ListDevices()
+		client.ListDevices()
 	},
 }
 
