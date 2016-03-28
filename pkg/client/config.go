@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/PI-Victor/gopushbullet/pkg/log"
 	"github.com/PI-Victor/gopushbullet/pkg/util"
-	"github.com/PI-Victor/gopushbullet/pkg/log"	
 )
 
 // Configuration holds information about the current setup of this CLI
@@ -22,7 +22,7 @@ type Configuration struct {
 func NewConfig() *Configuration {
 	confDir, confFile, err := util.CreateDirectories()
 	if err != nil {
-		log.Critical("An error occured %s", err)
+		log.Fatal("An error occured %s", err)
 	}
 
 	return &Configuration{
@@ -81,6 +81,6 @@ func (c *Configuration) Logout() {
 		log.Critical("An error occured while logging out: ", err)
 		return
 	}
-	
+
 	log.Info("Your user details have been successfully removed")
 }
