@@ -5,6 +5,24 @@ import (
 	"github.com/PI-Victor/gopushbullet/pkg/util"
 )
 
+// PushURL is the structure for pushes
+type PushURL struct {
+	Active        bool    `json:"active"`
+	Body          string  `json:"body"`
+	Created       float64 `json:"created"`
+	Direction     string  `json:"direction"`
+	Dismissed     string  `json:"dismissed"`
+	Ident         string  `json:"ident"`
+	Modified      string  `json:"modified"`
+	ReceiverEmail string  `json:"receiver_email_normalized"`
+	ReceiverID    string  `json:"receiver_iden"`
+	SenderEmail   string  `json:"sender_email_normalized"`
+	SenderID      string  `json:"sender_iden"`
+	SenderName    string  `json:"sender_name"`
+	Title         string  `json:"title"`
+	Type          string  `json:"type"`
+}
+
 // ListPushes retrieves pushes from an account and stores them on disk
 func ListPushes() {
 	newUserDetails := UserDetails{}
@@ -18,13 +36,3 @@ func ListPushes() {
 
 	util.ProcessAPIRequest("GET", util.PushesAPIURL, newUserDetails.Token, headerRequestOpt)
 }
-
-// ListDevices list devices associated to the account
-func ListDevices() {}
-
-// PushNote push a message/notification to a specific device or to all
-func PushNote() {}
-
-// PushSMS sends an sms message on behalf of a specified device to a specified
-// number
-func PushSMS() {}

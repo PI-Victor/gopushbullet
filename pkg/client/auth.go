@@ -13,7 +13,7 @@ type UserDetails struct {
 	ID            string  `json:"iden"`
 	DateCreated   float64 `json:"created"`
 	DateModified  float64 `json:"modified"`
-	Email         string  `json:"email"`
+	Email         string  `json:"email_normalized"`
 	Name          string  `json:"name"`
 	MaxUploadSize float64 `json:"max_upload_size"`
 	Token         string  `json:"token"`
@@ -23,7 +23,7 @@ type UserDetails struct {
 func Authenticate(userToken string) {
 	err := validateUserToken(userToken)
 	if err != nil {
-		log.Critical("%s", err)
+		log.Critical(err)
 	}
 }
 
