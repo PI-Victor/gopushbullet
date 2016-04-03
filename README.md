@@ -17,7 +17,7 @@ NOTE: Needs go 1.5 +
 * Log in with your generated token with `gunner login --token <my_generated_access_token>`  
 
 NOTE: Your user details and token are stored on disk under the folder
-`~/.gopush/user/`
+`~/.gunner/user/`
 
 Note: If you want to store your data locally there's also `sidekick` to help
 you manage your data.  
