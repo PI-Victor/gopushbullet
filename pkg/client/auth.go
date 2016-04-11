@@ -3,8 +3,8 @@ package client
 import (
 	"encoding/json"
 
-	"github.com/PI-Victor/gopushbullet/pkg/log"
-	"github.com/PI-Victor/gopushbullet/pkg/util"
+	"github.com/PI-Victor/gunner/pkg/log"
+	"github.com/PI-Victor/gunner/pkg/util"
 )
 
 // UserDetails holds information returned from the API
@@ -21,34 +21,34 @@ type UserDetails struct {
 
 // Authenticate validates the user Access Token
 func Authenticate(userToken string) {
-	err := validateUserToken(userToken)
+	user, err := validateUserToken(userToken)
 	if err != nil {
 		log.Fatal("", err)
 	}
+	log.Info("Token validated! Welcome %s", user.Name)
 }
 
 // validateUserToken validates the current access token
-func validateUserToken(userToken string) error {
+func validateUserToken(userToken string) (*UserDetails, error) {
 	// replace this with the header wrapper
 	headerOptions := make(map[string]string)
 	apiResponse, err := util.ProcessAPIRequest("GET", util.UsersAPIURL, userToken, headerOptions)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var user UserDetails
 	err = json.Unmarshal(apiResponse, &user)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	user.Token = userToken
-	log.Info("Token validated!\nLogged in as: %s \n", user.Name)
 
 	if err := storeUserToken(user); err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &user, nil
 }
 
 // stores the user token in a temporary hidden folder in $HOME
