@@ -4,7 +4,7 @@
 	"package": [
 		{
 			"checksumSHA1": "BoXdUBWB8UnSlFlbnuTQaPqfCGk=",
-			"origin": "github.com/PI-Victor/gopushbullet/vendor/github.com/op/go-logging",
+			"origin": "github.com/PI-Victor/gunner/vendor/github.com/op/go-logging",
 			"path": "github.com/op/go-logging",
 			"revision": "970db520ece77730c7e4724c61121037378659d9",
 			"revisionTime": "2016-03-15T21:05:05+01:00"
@@ -22,5 +22,5 @@
 			"revisionTime": "2015-10-24T12:54:09+02:00"
 		}
 	],
-	"rootPath": "github.com/PI-Victor/gopushbullet"
+	"rootPath": "github.com/PI-Victor/gunner"
 }
