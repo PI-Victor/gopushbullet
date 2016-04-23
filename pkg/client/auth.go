@@ -19,6 +19,10 @@ type UserDetails struct {
 	Token         string  `json:"token"`
 }
 
+func newUserDetails() *UserDetails {
+	return &UserDetails{}
+}
+
 // Authenticate validates the user Access Token
 func Authenticate(userToken string) {
 	user, err := validateUserToken(userToken)
@@ -37,7 +41,7 @@ func validateUserToken(userToken string) (*UserDetails, error) {
 		return nil, err
 	}
 
-	var user UserDetails
+	user := newUserDetails()
 	err = json.Unmarshal(apiResponse, &user)
 	if err != nil {
 		return nil, err
@@ -48,11 +52,11 @@ func validateUserToken(userToken string) (*UserDetails, error) {
 		return nil, err
 	}
 
-	return &user, nil
+	return user, nil
 }
 
 // stores the user token in a temporary hidden folder in $HOME
-func storeUserToken(user UserDetails) error {
+func storeUserToken(user *UserDetails) error {
 	newConfig := NewConfig()
 	err := newConfig.WriteConfig(user)
 	if err != nil {
