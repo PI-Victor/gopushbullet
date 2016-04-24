@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/PI-Victor/gopushbullet/pkg/log"
-	"github.com/PI-Victor/gopushbullet/pkg/util"
+	"github.com/PI-Victor/gunner/pkg/log"
+	"github.com/PI-Victor/gunner/pkg/util"
 )
 
 // Configuration holds information about the current setup of this CLI
@@ -22,7 +22,7 @@ type Configuration struct {
 func NewConfig() *Configuration {
 	confDir, confFile, err := util.CreateDirectories()
 	if err != nil {
-		log.Fatal("An error occured %s", err)
+		log.Fatal("", err)
 	}
 
 	return &Configuration{
@@ -52,25 +52,18 @@ func (c *Configuration) WriteConfig(user interface{}) error {
 	return nil
 }
 
-// ReadConfig read the stored configuration about the user from the file on the
-// disk, return the userDetails struct with the apropiate data or fail for any
-// other reason.
-func (c *Configuration) ReadConfig(user interface{}) (userDetails interface{}, err error) {
+// ReadConfig returns the user details stored on disk in json encoding
+func (c *Configuration) ReadConfig() (configDetails []byte, err error) {
 	if _, err = os.Stat(c.configFile); os.IsNotExist(err) {
 		return nil, err
 	}
 
-	authDetails, err := ioutil.ReadFile(c.configFile)
+	configDetails, err = ioutil.ReadFile(c.configFile)
 	if err != nil {
 		return nil, err
 	}
 
-	err = json.Unmarshal(authDetails, &userDetails)
-	if err != nil {
-		return nil, err
-	}
-
-	return &userDetails, nil
+	return configDetails, nil
 }
 
 // Logout logs a user out by purging all the stored config files and data from
@@ -78,8 +71,7 @@ func (c *Configuration) ReadConfig(user interface{}) (userDetails interface{}, e
 func (c *Configuration) Logout() {
 	err := util.PurgeArtifacts(c.configDir)
 	if err != nil {
-		log.Critical("An error occured while logging out: ", err)
-		return
+		log.Fatal("An error occured while logging out: ", err)
 	}
 
 	log.Info("Your user details have been successfully removed")
