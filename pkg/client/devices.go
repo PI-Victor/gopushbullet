@@ -33,7 +33,7 @@ type Device struct {
 
 // ListDevices list devices associated to the account.
 func ListDevices() {
-	userDetails := UserDetails{}
+	userDetails := newUserDetails()
 	newConfig := NewConfig()
 	configDetails, err := newConfig.ReadConfig()
 	if err != nil {
