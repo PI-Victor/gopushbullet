@@ -1,14 +1,19 @@
 package util
 
 import (
-	"fmt"
+	"errors"
 	"os"
 	"path"
 )
 
 const (
-	configFileName = "user.json"
-	configDir      = ".gopush"
+	configFileName = "details.json"
+	configDir      = ".gunner"
+	userDetailsDir = "user"
+)
+
+var (
+	ErrNoHOME = errors.New("Couldn't read the $HOME variable, no place to store app config")
 )
 
 // CreateDirectories creates the configuration directories where the
@@ -16,7 +21,7 @@ const (
 func CreateDirectories() (configDirPath string, configFilePath string, err error) {
 	homePath := os.Getenv("HOME")
 	if homePath == "" {
-		return "", "", fmt.Errorf("Couldn't read the $HOME variable, no place to store app config")
+		return "", "", ErrNoHOME
 	}
 
 	configDirPath = path.Join(homePath, configDir)
