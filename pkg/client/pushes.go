@@ -32,9 +32,13 @@ type PushURL struct {
 	Type          string  `json:"type"`
 }
 
+func newPushList() *PushesList {
+	return &PushesList{}
+}
+
 // ListPushes retrieves pushes from an account and stores them on disk
 func ListPushes() {
-	userDetails := UserDetails{}
+	userDetails := newUserDetails()
 	newConfig := NewConfig()
 	configDetails, err := newConfig.ReadConfig()
 	if err != nil {
@@ -45,15 +49,16 @@ func ListPushes() {
 		log.Fatal("", err)
 	}
 	// create a bogus request
-	headerRequestOpt := make(map[string]string)
+	var headerOpt map[string]string
 
-	response, err := util.ProcessAPIRequest("GET", util.PushesAPIURL, userDetails.Token, headerRequestOpt)
+	response, err := util.ProcessAPIRequest("GET", util.PushesAPIURL, "", userDetails.Token, headerOpt)
 
+	log.Debug("%#v", response)
 	if err != nil {
 		log.Fatal("", err)
 	}
 
-	pushes := &PushesList{}
+	pushes := newPushList()
 	err = json.Unmarshal(response, &pushes)
 	if err != nil {
 		log.Fatal("", err)
@@ -61,6 +66,8 @@ func ListPushes() {
 
 	if pushes.Cursor != "" {
 		log.Debug("Cursor is not empty", pushes.Cursor)
+		cursor := paginate(pushes.Cursor)
+
 	}
 
 	for _, i := range pushes.Pushes {
@@ -72,6 +79,8 @@ func ListPushes() {
 	}
 }
 
-func pushPrinter() {
-
+func paginate(cursor string, user UserDetails) []byte {
+	var headerOpt = make(map[string]string)
+	response, err := util.ProcessAPIRequest("GET", util.PushesAPIURL, "", user.Token, headerOpt)
+	return response
 }
