@@ -9,16 +9,18 @@ import (
 const format = "%{time:15:04:05.000} %{color} %{level:.6s} ▶ %{color:reset} %{message}"
 
 var (
-	log       = logging.MustGetLogger("gopush")
-	formatter = logging.MustStringFormatter(format)
+	log              = logging.MustGetLogger("gunner")
+	formatter        = logging.MustStringFormatter(format)
+	infoBackend      = logging.NewLogBackend(os.Stderr, "", 0)
+	backendFormatter = logging.NewBackendFormatter(infoBackend, formatter)
 )
 
 func init() {
-	infoBackend := logging.NewLogBackend(os.Stderr, "", 0)
-	backendFormatter := logging.NewBackendFormatter(infoBackend, formatter)
 	logging.SetBackend(backendFormatter)
 }
 
+// NOTE: this needs some refactoring since it's absurd to call non formatting
+// logging functions this way
 func Debug(format string, args ...interface{})    { log.Debugf(format, args...) }
 func Info(format string, args ...interface{})     { log.Infof(format, args...) }
 func Notice(format string, args ...interface{})   { log.Noticef(format, args...) }

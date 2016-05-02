@@ -1,10 +1,12 @@
 package util
 
 import (
+	"bytes"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"path"
 )
 
@@ -52,7 +54,7 @@ type Client interface {
 // adds parameters to the header of a request that gets sent to the API. The
 // type of the response and the saved access token are added by default to each
 // request
-func headerEnrichment(req *http.Request, token string, headerOpt map[string]string) {
+func headerEnrichment(req *http.Request, cursor, token string, headerOpt map[string]string) {
 	req.Header.Add("application/type", HeaderMIMEJsonType)
 	req.Header.Add("Access-Token", token)
 	for headerOpt, value := range headerOpt {
@@ -67,14 +69,20 @@ func createNewHTTPClient() *http.Client {
 
 // ProcessAPIRequest process requests made to the API by adding header
 // enrichment, http operations, etc.
-func ProcessAPIRequest(HTTPMethod string, URLPath string, userToken string, headerOpt map[string]string) ([]byte, error) {
+func requestWrapper(HTTPMethod string, URLPath, userToken, cursor string, headerOpt map[string]string) ([]byte, error) {
+	var data = url.Values{}
+
+	if cursor != "" {
+		data.Set("cursor", cursor)
+	}
 	requestClient := createNewHTTPClient()
-	req, err := http.NewRequest(HTTPMethod, URLPath, nil)
+	body := bytes.NewBufferString(data.Encode())
+	req, err := http.NewRequest(HTTPMethod, URLPath, body)
 	if err != nil {
 		return nil, err
 	}
 
-	headerEnrichment(req, userToken, headerOpt)
+	headerEnrichment(req, userToken, "", headerOpt)
 	resp, err := requestClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -92,7 +100,7 @@ func ProcessAPIRequest(HTTPMethod string, URLPath string, userToken string, head
 		if err != nil {
 			return nil, err
 		}
-		return nil, fmt.Errorf("There was an error authenticating you: %s", requestError.APIError.ErrorCode)
+		return nil, errors.New(requestError.APIError.ErrorCode)
 	}
 
 	return response, nil
