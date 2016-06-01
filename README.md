@@ -1,5 +1,10 @@
 Gunner & Sidekick
 ---
+[![CircleCI](https://circleci.com/gh/PI-Victor/gunner/tree/master.svg?style=svg)](https://circleci.com/gh/PI-Victor/gunner/tree/master)
+[![Apache](https://img.shields.io/badge/license-Apache%20License%202.0-E91E63.svg?style=flat-square)](http://www.apache.org/licenses/)
+
+#### Not functional yet!!!
+---
 
 What is [Pushbullet](https://pushbullet.com)?
 
@@ -22,10 +27,3 @@ NOTE: Your user details and token are stored on disk under the folder
 Note: If you want to store your data locally there's also `sidekick` to help
 you manage your data.  
 `sidekick sync` - this will retrieve and store locally all of your links, device list, created chats and subscriptions.
-
-
-#### Not Functional yet
-* OAuth login.
-
-
-Licensed under: [Apache V2](http://www.apache.org/licenses/)  
