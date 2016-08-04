@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/PI-Victor/gopushbullet/pkg/log"
-	"github.com/PI-Victor/gopushbullet/pkg/util"
+	"github.com/PI-Victor/gunner/pkg/log"
+	"github.com/PI-Victor/gunner/pkg/util"
 )
 
 // Configuration holds information about the current setup of this CLI

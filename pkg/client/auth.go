@@ -3,8 +3,8 @@ package client
 import (
 	"encoding/json"
 
-	"github.com/PI-Victor/gopushbullet/pkg/log"
-	"github.com/PI-Victor/gopushbullet/pkg/util"
+	"github.com/PI-Victor/gunner/pkg/log"
+	"github.com/PI-Victor/gunner/pkg/util"
 )
 
 // UserDetails holds information returned from the API

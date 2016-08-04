@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/PI-Victor/gopushbullet/pkg/log"
-	"github.com/PI-Victor/gopushbullet/pkg/util"
+	"github.com/PI-Victor/gunner/pkg/log"
+	"github.com/PI-Victor/gunner/pkg/util"
 )
 
 // PushURL is the structure for pushes
