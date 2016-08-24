@@ -3,6 +3,7 @@ package util
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/PI-Victor/gunner/pkg/log"
 	"io/ioutil"
 	"net/http"
 	"path"
@@ -53,7 +54,8 @@ type Client interface {
 // type of the response and the saved access token are added by default to each
 // request
 func headerEnrichment(req *http.Request, token string, headerOpt map[string]string) {
-	req.Header.Add("application/type", HeaderMIMEJsonType)
+	// req.Header.Add("application/json", HeaderMIMEJsonType)
+
 	req.Header.Add("Access-Token", token)
 	for headerOpt, value := range headerOpt {
 		req.Header.Add(headerOpt, value)
@@ -75,6 +77,7 @@ func ProcessAPIRequest(HTTPMethod string, URLPath string, userToken string, head
 	}
 
 	headerEnrichment(req, userToken, headerOpt)
+	log.Debug("the header: %#v", req.Header)
 	resp, err := requestClient.Do(req)
 	if err != nil {
 		return nil, err

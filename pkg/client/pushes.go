@@ -25,7 +25,7 @@ type PushURL struct {
 
 // ListPushes retrieves pushes from an account and stores them on disk
 func ListPushes() {
-	newUserDetails := UserDetails{}
+	newUserDetails := User{}
 	newConfig := NewConfig()
 	newConfig.ReadConfig(newUserDetails)
 	log.Debug("printing", newUserDetails)

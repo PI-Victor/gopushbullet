@@ -26,7 +26,9 @@ login --google user@gmail.com
 login --facebook user@facebook.com
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		client.Authenticate(APIToken)
+		user := client.NewUser()
+		user.Token = APIToken
+		user.Authenticate()
 	},
 }
 

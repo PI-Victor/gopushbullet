@@ -52,10 +52,10 @@ func (c *Configuration) WriteConfig(user interface{}) error {
 	return nil
 }
 
-// ReadConfig read the stored configuration about the user from the file on the
-// disk, return the userDetails struct with the apropiate data or fail for any
+// ReadConfig reads the stored configuration about the user from the file on the
+// disk, returns the userDetails struct with the apropiate data or fail for any
 // other reason.
-func (c *Configuration) ReadConfig(user interface{}) (userDetails interface{}, err error) {
+func (c *Configuration) ReadConfig(user User) (userDecodedDetails []byte, err error) {
 	if _, err = os.Stat(c.configFile); os.IsNotExist(err) {
 		return nil, err
 	}
@@ -65,12 +65,12 @@ func (c *Configuration) ReadConfig(user interface{}) (userDetails interface{}, e
 		return nil, err
 	}
 
-	err = json.Unmarshal(authDetails, &userDetails)
+	err = json.Unmarshal(authDetails, &userDecodedDetails)
 	if err != nil {
 		return nil, err
 	}
 
-	return &userDetails, nil
+	return userDecodedDetails, nil
 }
 
 // Logout logs a user out by purging all the stored config files and data from

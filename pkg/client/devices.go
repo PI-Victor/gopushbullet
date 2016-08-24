@@ -28,14 +28,14 @@ type Device struct {
 	Token      string  `json:"push_token"`
 }
 
-// IDEA: the authetication validation function needs to be extracted to a
+// NOTE: the authetication validation function needs to be extracted to a
 // general wrapper for all outgoing requests. Same for pkg/client/pushes.go
 
 // ListDevices list devices associated to the account.
 func ListDevices() {
-	userDetails := UserDetails{}
+	userDetails := User{}
 	newConfig := NewConfig()
-	configDetails, err := newConfig.ReadConfig()
+	configDetails, err := newConfig.ReadConfig(userDetails)
 	if err != nil {
 		log.Fatal("", err)
 	}
