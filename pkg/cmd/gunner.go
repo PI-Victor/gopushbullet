@@ -51,33 +51,6 @@ var ListPushes = &cobra.Command{
 	},
 }
 
-// PushNote pushes a message/notification to a specified device or to all
-var PushNote = &cobra.Command{
-	Use:   "push-note",
-	Short: "Push ephemeral notifications from the CLI to your devices",
-	Run: func(cmd *cobra.Command, args []string) {
-		client.PushNote()
-	},
-}
-
-// PushSMS sends a SMS message to a specific number from your device
-var PushSMS = &cobra.Command{
-	Use:   "sms",
-	Short: "Send SMS messages on behalf of your device to a specified number",
-	Run: func(cmd *cobra.Command, args []string) {
-		client.PushSMS()
-	},
-}
-
-// ListDevices lists the devices that are attached to your Pushbullet account
-var ListDevices = &cobra.Command{
-	Use:   "list-devices",
-	Short: "List devices that are attached to your account",
-	Run: func(cmd *cobra.Command, args []string) {
-		client.ListDevices()
-	},
-}
-
 func init() {
 	LoginCommand.PersistentFlags().StringVar(&APIToken, "token", "", "Specify your account Access Token")
 	LoginCommand.PersistentFlags().StringVar(&APIToken, "oauth", "", "Specify an OAuth provider")
