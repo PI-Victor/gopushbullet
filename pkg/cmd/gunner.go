@@ -22,8 +22,6 @@ var LoginCommand = &cobra.Command{
 Fill in your Pushbullet Access Token or specify an oauth provider and use it to
 access you account.
 login --token <my_generated_access_token>
-login --google user@gmail.com
-login --facebook user@facebook.com
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		user := client.NewUser()
@@ -53,7 +51,7 @@ var ListPushes = &cobra.Command{
 
 func init() {
 	LoginCommand.PersistentFlags().StringVar(&APIToken, "token", "", "Specify your account Access Token")
-	LoginCommand.PersistentFlags().StringVar(&APIToken, "oauth", "", "Specify an OAuth provider")
 	ListPushes.PersistentFlags().StringVar(&pushesFilter, "filter", "", "A filter for the returned pushes")
-	ListPushes.PersistentFlags().StringVar(&deleted, "deleted", "off", "Display deleted pushes by turning the flag on")
+	ListPushes.PersistentFlags().StringVar(&deleted, "deleted", "off", `Pushes that have been delete are
+		off by default, you can enable them by turning the flag on`)
 }
